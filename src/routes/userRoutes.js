@@ -1,6 +1,7 @@
 let express = require("express");
 const { UserModal } = require("../modle/user_model");
 const { create_user, login_user } = require("../controllers/user_controller");
+const { auth } = require("../middleware/auth");
 
 let userRoute = express.Router();
 

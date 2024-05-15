@@ -1,6 +1,9 @@
 const { UserModal } = require("../modle/user_model");
 require("dotenv").config();
 let bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
+
+/** for create user */
 let create_user = async (req, res) => {
   try {
     let { name, email, password } = req.body;
@@ -23,6 +26,7 @@ let create_user = async (req, res) => {
   }
 };
 
+/** for login user */
 let login_user = async (req, res) => {
   let { email, password } = req.body;
   try {
@@ -37,9 +41,24 @@ let login_user = async (req, res) => {
       return res.status(400).send({ error: "Oops! your password is invalied" });
     }
 
-    return res.status(200).send({
-      message: `Welcome ${user.name} you'r logged in successfully`,
-    });
+    let token = jwt.sign(
+      { userId: user._id, name: user.name },
+      process.env.SECRET_TOKEN
+    );
+
+    if (!token) {
+      return res
+        .status(400)
+        .send({ error: "Oops somthing went wrong while creating JWT" });
+    }
+
+    return res
+      .status(200)
+      .cookie("token", token, { httpOnly: true, secure: true })
+      .send({
+        message: `Welcome ${user.name} you'r logged in successfully`,
+        token,
+      });
   } catch (error) {
     return res.status(404).send(error);
   }
