@@ -3,8 +3,9 @@ const { UserModal } = require("../modle/user_model");
 
 let authantication = async (req, res, next) => {
   try {
-    let token = req.cookies?.token;
-    // console.log(data);
+    // req.cookies?.token ||
+    let token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    // console.log(token);
     if (!token) {
       return res.status(404).send({
         error: "please Login first",

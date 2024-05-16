@@ -1,6 +1,7 @@
 let express = require("express");
 let mongoose = require("mongoose");
 var cookieParser = require("cookie-parser");
+var cors = require("cors");
 
 const { connection } = require("./db");
 const { UserModal } = require("./modle/user_model");
@@ -11,6 +12,7 @@ const { authantication } = require("./middleware/auth");
 let PORT = process.env.PORT || 8080;
 require("dotenv").config();
 let app = express();
+app.use(cors("*"));
 app.use(cookieParser());
 app.use(express.json());
 

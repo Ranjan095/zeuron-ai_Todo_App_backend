@@ -32,13 +32,13 @@ let login_user = async (req, res) => {
   try {
     let user = await UserModal.findOne({ email });
     if (!user) {
-      return res.status(400).send({ error: "your emai is invalid" });
+      return res.status(400).send({ error: "Your email is invalid" });
     }
 
-    let isPassworCorrect = bcrypt.compareSync(password, user.password);
+    let isPasswordCorrect = bcrypt.compareSync(password, user.password);
 
-    if (!isPassworCorrect) {
-      return res.status(400).send({ error: "Oops! your password is invalied" });
+    if (!isPasswordCorrect) {
+      return res.status(400).send({ error: "Oops! Your password is invalid" });
     }
 
     let token = jwt.sign(
@@ -49,18 +49,23 @@ let login_user = async (req, res) => {
     if (!token) {
       return res
         .status(400)
-        .send({ error: "Oops somthing went wrong while creating JWT" });
+        .send({ error: "Oops something went wrong while creating JWT" });
     }
 
     return res
       .status(200)
-      .cookie("token", token, { httpOnly: true, secure: true })
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true, // Set to true if your app uses HTTPS
+        sameSite: "None", // Use "None" for cross-site cookies
+      })
       .send({
-        message: `Welcome ${user.name} you'r logged in successfully`,
+        message: `Welcome ${user.name}, you're logged in successfully`,
         token,
       });
   } catch (error) {
-    return res.status(404).send(error);
+    return res.status(500).send({ error: "Internal server error" });
   }
 };
+
 module.exports = { create_user, login_user };
