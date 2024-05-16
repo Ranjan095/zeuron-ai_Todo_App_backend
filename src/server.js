@@ -1,11 +1,17 @@
 let express = require("express");
 let mongoose = require("mongoose");
+var cookieParser = require("cookie-parser");
+
 const { connection } = require("./db");
 const { UserModal } = require("./modle/user_model");
 const { userRoute } = require("./routes/userRoutes");
+const { taskRoute } = require("./routes/task_route");
+const { authantication } = require("./middleware/auth");
+
 let PORT = process.env.PORT || 8080;
 require("dotenv").config();
 let app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 // console.log(express)
@@ -15,6 +21,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoute);
+app.use("/tasks", authantication, taskRoute);
 
 app.listen(PORT, async () => {
   try {
