@@ -1,6 +1,6 @@
 let mongoose = require("mongoose");
 
-let taskSchema =new mongoose.Schema(
+let taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -23,11 +23,15 @@ let taskSchema =new mongoose.Schema(
     deadline: {
       type: Date,
     },
+    owner: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
+let TaskModal = mongoose.model("tasks", taskSchema);
 
-let TaskModal = mongoose.model("tasks",taskSchema);
-
-module.exports ={TaskModal}
+module.exports = { TaskModal };

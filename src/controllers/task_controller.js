@@ -16,6 +16,7 @@ let createTask = async (req, res) => {
       category,
       priority,
       deadline,
+      owner: req?.user?._id,
     });
 
     task.save();
@@ -29,4 +30,11 @@ let createTask = async (req, res) => {
   }
 };
 
-module.exports = { createTask };
+let getTasks = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+};
+
+module.exports = { createTask, getTasks };
