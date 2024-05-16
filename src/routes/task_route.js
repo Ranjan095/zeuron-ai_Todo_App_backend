@@ -1,15 +1,8 @@
 let express = require("express");
+const { createTask } = require("../controllers/task_controller");
 
 let taskRoute = express.Router();
 
-taskRoute.get("/", async (req, res) => {
-  try {
-    return res.status(200).send({
-      message: "all tasks are available",
-    });
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
+taskRoute.post("/create", createTask);
 
 module.exports = { taskRoute };
