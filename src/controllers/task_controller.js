@@ -32,6 +32,16 @@ let createTask = async (req, res) => {
 
 let getTasks = async (req, res) => {
   try {
+    let tasks = await TaskModal.find({ owner: req?.user?._id });
+    if (!tasks) {
+      return res.status(404).send({
+        error: "there is no task available",
+      });
+    }
+
+    return res.status(200).send({
+      data: tasks,
+    });
   } catch (error) {
     res.status(404).send(error.message);
   }
