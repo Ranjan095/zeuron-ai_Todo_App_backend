@@ -1,5 +1,6 @@
 const { TaskModal } = require("../modle/task_model");
 
+// for create all tasks
 let createTask = async (req, res) => {
   try {
     let { title, description, category, priority, deadline } = req.body;
@@ -30,6 +31,7 @@ let createTask = async (req, res) => {
   }
 };
 
+// for get all tasks
 let getTasks = async (req, res) => {
   try {
     let tasks = await TaskModal.find({ owner: req?.user?._id });
@@ -47,4 +49,55 @@ let getTasks = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getTasks };
+// for update task
+let updateTask = async (req, res) => {
+  try {
+    let { taskId } = req.query;
+    let { title, description, category, priority, deadline } = req.body;
+    // console.log(taskId);
+
+    if (!taskId) {
+      return res.status(404).send({ error: "taskId is not found" });
+    }
+
+    let newTask = await TaskModal.findByIdAndUpdate(
+      { _id: taskId },
+      {
+        title,
+        description,
+        category,
+        priority,
+        deadline,
+      },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .send({ message: "Task updated successfully", updatedTask: newTask });
+  } catch (error) {
+    return res.status(404).send(error.message);
+  }
+};
+
+// for delete task
+let deleteTask = async (req, res) => {
+  try {
+    let { taskId } = req.query;
+
+    if (!taskId) {
+      return res.status(404).send({ error: "taskId is not found" });
+    }
+
+    let deleteTask = await TaskModal.findByIdAndDelete({ _id: taskId });
+
+    if (!deleteTask) {
+      return res.status(404).send({ error: "taskId is invalid " });
+    }
+
+    return res.status(200).send({ message: "Task deleted successfully" });
+  } catch (error) {
+    return res.status(404).send(error.message);
+  }
+};
+module.exports = { createTask, getTasks, updateTask, deleteTask };
