@@ -23,6 +23,11 @@ let taskSchema = new mongoose.Schema(
     deadline: {
       type: Date,
     },
+    status: {
+      type: String,
+      enum: ["pending", "completed"],
+      default: "pending",
+    },
     owner: {
       type: mongoose.Types.ObjectId,
       ref: "users",
