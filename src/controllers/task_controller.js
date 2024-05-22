@@ -53,7 +53,7 @@ let getTasks = async (req, res) => {
 let updateTask = async (req, res) => {
   try {
     let { taskId } = req.query;
-    let { title, description, category, priority, deadline } = req.body;
+    let { title, description, category, priority, status, deadline } = req.body;
     // console.log(taskId);
 
     if (!taskId) {
@@ -68,6 +68,7 @@ let updateTask = async (req, res) => {
         category,
         priority,
         deadline,
+        status,
       },
       { new: true }
     );
