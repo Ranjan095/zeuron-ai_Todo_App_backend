@@ -61,6 +61,7 @@ let login_user = async (req, res) => {
       })
       .send({
         message: `Welcome ${user.name}, you're logged in successfully`,
+        name: user.name,
         token,
       });
   } catch (error) {
